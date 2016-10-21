@@ -1,7 +1,9 @@
-const { combineReducers, createStore, applyMiddleware } = require('redux');
-const util = require('util');
+// @flow
 
-const user = require('./user');
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import util from 'util';
+
+import user, { actions, constants, selectors } from './user';
 
 const initialState = {
   user: {
@@ -13,8 +15,8 @@ const rootReducer = combineReducers({
   user,
 });
 
-const middleware = (store) => (next) => (action) => {
-  if (action.type === user.constants.SET_USER_NAME) {
+const middleware = (store) => (next) => (action /* : userAction */) => {
+  if (action.type === constants.SET_USER_NAME) {
     process.stdout.write('an action has passed through!\n');
   }
   return next(action);
@@ -22,17 +24,17 @@ const middleware = (store) => (next) => (action) => {
 
 const store = createStore(rootReducer, initialState, applyMiddleware(middleware));
 
-const initialName = user.selectors.getUserName(store.getState());
+const initialName /* : name */ = selectors.getUserName(store.getState());
 
 process.stdout.write(`user name initiated as: ${initialName}\n`);
 
-const updateNameAndOutput = (text) => {
+const updateNameAndOutput = (text /* : string */) => {
   text = text.replace('\n', '');
 
   if (text) {
-    store.dispatch(user.actions.setUserName(util.inspect(text)));
+    store.dispatch(actions.setUserName(util.inspect(text)));
 
-    const updatedName = user.selectors.getUserName(store.getState());
+    const updatedName = selectors.getUserName(store.getState());
 
     process.stdout.write(`user name is now: ${updatedName}\n`);
   }
@@ -41,3 +43,9 @@ const updateNameAndOutput = (text) => {
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', updateNameAndOutput);
+
+/* flow-include
+
+import type { name, userAction } from './user';
+
+*/

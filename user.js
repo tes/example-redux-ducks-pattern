@@ -1,12 +1,14 @@
-const { combineReducers } = require('redux');
-const { createSelector } = require('reselect');
+// @flow
 
-const constants = {
+import { combineReducers } from 'redux';
+import { createSelector }  from 'reselect';
+
+export const constants = {
   SET_USER_NAME: 'user/SET_USER_NAME',
 };
 
-const actions = {
-  setUserName(name) {
+export const actions = {
+  setUserName(name /* : ?name */) /* : setUserNameAction */ {
     return {
       type: constants.SET_USER_NAME,
       payload: name,
@@ -14,28 +16,35 @@ const actions = {
   },
 };
 
-const getRootSelector = (state) => state.user;
+const getRootSelector = (state) /* : { name: name } */ => state.user;
 
 const getUserName = createSelector(
   getRootSelector,
-  ({ name }) => name
+  (user) /* : name */ => user.name
 );
 
-const selectors = {
+export const selectors = {
   getUserName,
 };
 
-const user = combineReducers({
-  name: (state = '', action) => {
+export default combineReducers({
+  name: (state /* : name */, action /* : userAction */) => {
     switch (action.type) {
-      case constants.SET_USER_NAME: return action.payload;
-      default: return state;
+      case constants.SET_USER_NAME: return action.payload || state;
+      default: return state || '';
     }
   },
 });
 
-user.constants = constants;
-user.actions = actions;
-user.selectors = selectors;
+/* flow-include
 
-module.exports = user;
+export type name = string;
+
+export type setUserNameAction = {
+  type: string,
+  payload: ?name
+};
+
+export type userAction = setUserNameAction;
+
+*/
