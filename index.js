@@ -1,7 +1,7 @@
-const { combineReducers, createStore, applyMiddleware } = require('redux');
-const util = require('util');
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import util from 'util';
 
-const user = require('./user');
+import user, { actions, constants, selectors } from './user';
 
 const initialState = {
   user: {
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
 });
 
 const middleware = (store) => (next) => (action) => {
-  if (action.type === user.constants.SET_USER_NAME) {
+  if (action.type === constants.SET_USER_NAME) {
     process.stdout.write('an action has passed through!\n');
   }
   return next(action);
@@ -22,7 +22,7 @@ const middleware = (store) => (next) => (action) => {
 
 const store = createStore(rootReducer, initialState, applyMiddleware(middleware));
 
-const initialName = user.selectors.getUserName(store.getState());
+const initialName = selectors.getUserName(store.getState());
 
 process.stdout.write(`user name initiated as: ${initialName}\n`);
 
@@ -30,9 +30,9 @@ const updateNameAndOutput = (text) => {
   text = text.replace('\n', '');
 
   if (text) {
-    store.dispatch(user.actions.setUserName(util.inspect(text)));
+    store.dispatch(actions.setUserName(util.inspect(text)));
 
-    const updatedName = user.selectors.getUserName(store.getState());
+    const updatedName = selectors.getUserName(store.getState());
 
     process.stdout.write(`user name is now: ${updatedName}\n`);
   }

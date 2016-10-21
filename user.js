@@ -1,11 +1,11 @@
-const { combineReducers } = require('redux');
-const { createSelector } = require('reselect');
+import { combineReducers } from 'redux';
+import { createSelector }from 'reselect';
 
-const constants = {
+export const constants = {
   SET_USER_NAME: 'user/SET_USER_NAME',
 };
 
-const actions = {
+export const actions = {
   setUserName(name) {
     return {
       type: constants.SET_USER_NAME,
@@ -21,11 +21,11 @@ const getUserName = createSelector(
   ({ name }) => name
 );
 
-const selectors = {
+export const selectors = {
   getUserName,
 };
 
-const user = combineReducers({
+export default combineReducers({
   name: (state = '', action) => {
     switch (action.type) {
       case constants.SET_USER_NAME: return action.payload;
@@ -33,9 +33,3 @@ const user = combineReducers({
     }
   },
 });
-
-user.constants = constants;
-user.actions = actions;
-user.selectors = selectors;
-
-module.exports = user;
