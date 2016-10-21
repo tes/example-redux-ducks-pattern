@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { createSelector }from 'reselect';
 
+const defaultName = null;
+
 export const constants = {
   SET_USER_NAME: 'user/SET_USER_NAME',
 };
@@ -29,7 +31,7 @@ export default combineReducers({
   name: (state, action) => {
     switch (action.type) {
       case constants.SET_USER_NAME: return action.payload;
-      default: return state || '';
+      default: return state || defaultName;
     }
   },
 });
