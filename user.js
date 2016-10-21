@@ -26,10 +26,10 @@ export const selectors = {
 };
 
 export default combineReducers({
-  name: (state = '', action) => {
+  name: (state, action) => {
     switch (action.type) {
       case constants.SET_USER_NAME: return action.payload;
-      default: return state;
+      default: return state || '';
     }
   },
 });
