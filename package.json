@@ -11,5 +11,8 @@
   "dependencies": {
     "redux": "^3.6.0",
     "reselect": "^2.5.3"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.33.0"
   }
 }
